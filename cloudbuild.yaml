@@ -1,0 +1,22 @@
+logsBucket: gs://arviussoft  # Specify your log bucket at the top level
+
+options:
+  logging: LEGACY  # Default logging (or remove this line)
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/elevated-patrol-399105/usr-app', '.']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'usr-app'
+      - '--image'
+      - 'gcr.io/elevated-patrol-399105/usr-app'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
